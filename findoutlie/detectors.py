@@ -11,7 +11,8 @@ requirements are met and raise an error otherwise.
 """
 
 # Any imports you need
-# +++your code here+++
+import numpy as np
+import nibabel as nib
 
 
 def iqr_detector(measures, iqr_proportion=1.5):
@@ -50,4 +51,9 @@ def iqr_detector(measures, iqr_proportion=1.5):
     # * investigate np.percentile
     # * You'll likely need np.logical_or
     # https://textbook.nipraxis.org/numpy_logical.html
-    # +++your code here+++
+    Q3 = np.percentile(a=measures, q=75)
+    Q1 = np.percentile(a=measures, q=25)
+    IQR = Q3 - Q1
+
+    return np.logical_or(measures > Q3 + IQR * iqr_proportion,
+                         measures < Q1 - IQR * iqr_proportion)
