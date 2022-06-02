@@ -5,10 +5,11 @@ Run as:
     python3 scripts/validata_data.py data
 """
 
-import os
+
+import os.path as op
 import sys
 import hashlib
-
+import os
 
 def file_hash(filename):
     """ Get byte contents of file `filename`, return SHA1 hash
@@ -24,18 +25,15 @@ def file_hash(filename):
         SHA1 hexadecimal hash string for contents of `filename`.
     """
     # Open the file, read contents as bytes.
-    fobj = open(filename, 'rb')
-    file_bytes = fobj.read()
-    fobj.close()
-
     # Calculate, return SHA1 has on the bytes from the file.
-    hash_value = hashlib.sha1(file_bytes).hexdigest()
-    return hash_value
+    with open(filename, 'rb') as fobj:
+        contents = fobj.read()
+    return hashlib.sha1(contents).hexdigest()
 
 
 def validate_data(data_directory):
     """ Read ``hash_list.txt`` file in ``data_directory``, check hashes
-    
+
     An example file ``data_hashes.txt`` is found in the baseline version
     of the repository template for your reference.
 
@@ -55,24 +53,15 @@ def validate_data(data_directory):
         ``hash_list.txt`` file.
     """
     # Read lines from ``hash_list.txt`` file.
-    import os.path as op
-    import numpy as np
-
-    #data_directory = '/Users/hyesue/Research/nipraxis/week5/collab/diagnostics-HyMi/data/group-01'
-    fname = op.join(data_directory, 'hash_list.txt')
-    hash_list = np.loadtxt(fname, dtype='str')
+    for line in open(os.path.join(data_directory, 'data_hashes.txt'), 'rt'):
     # Split into SHA1 hash and filename
-
+    hash, filename = line.strip().split()
     # Calculate actual hash for given filename.
-    for i in range(0, np.shape(hash_list)[0]):
-        fname = data_directory + '/../' + hash_list[i,1]
-
-        this_file_hash = file_hash(fname)
-
-        # If hash for filename is not the same as the one in the file, raise
-        # ValueError
-        if this_file_hash != hash_list[i,0]:
-            raise NotImplementedError('Not valid.')
+    actual_hash = file_hash(os.path.join(data_directory, filename))
+    # If hash for filename is not the same as the one in the file, raise
+    # ValueError
+    if hash != actual_hash:
+        raise ValueError("Hash for {} does not match".format(filename))
 
 
 def main():
