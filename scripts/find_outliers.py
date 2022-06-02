@@ -1,8 +1,11 @@
-""" Python script to find outliers
+""" Python script to find outliers using the outfind.py commands
 
+
+This is the python script put together to detect outliers by Hyesue & Michael as part of the HyMi Nipraxis group
 Run as:
-
     python3 scripts/find_outliers.py data
+
+It runs within the findoulie module that was created for the course
 """
 
 import os.path as op
@@ -14,8 +17,14 @@ from argparse import ArgumentParser, RawDescriptionHelpFormatter
 PACKAGE_DIR = op.join(op.dirname(__file__), '..')
 sys.path.append(PACKAGE_DIR)
 
+# Importing the findoutlie module which is located in *diagnostics-HyMi/findoutlie
 from findoutlie import outfind
 
+if len(sys.argv) != 2:
+    print(" \nThis scripts identifies outliers on all *nii.gz files within a subject directory (e.g., sub-01) or directory with subjects data (e.g. data/group-01)")
+    print(" Usage: python find_outliers.py <data folder> <SD threshold>")
+    print(" Example: python3 scripts/find_outliers.py data/group-01")
+    sys.exit()
 
 def print_outliers(data_directory):
     outlier_dict = outfind.find_outliers(data_directory)
@@ -38,7 +47,6 @@ def get_parser():
 
 def main():
     # This function (main) called when this file run as a script.
-    #
     # Get the data directory from the command line arguments
     parser = get_parser()
     args = parser.parse_args()
