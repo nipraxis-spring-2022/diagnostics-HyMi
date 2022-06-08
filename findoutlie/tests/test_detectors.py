@@ -24,7 +24,7 @@ import numpy as np
 
 # This import needs the directory containing the findoutlie directory
 # on the Python path.
-from detectors import iqr_detector
+from ..detectors import iqr_detector
 
 
 def test_iqr_detector():
