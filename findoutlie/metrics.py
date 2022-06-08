@@ -1,7 +1,7 @@
 """ Scan outlier metrics
 """
 
-#+ Your imports here.
+import numpy as np
 
 
 def dvars(img):
@@ -28,4 +28,13 @@ def dvars(img):
     #
     # You may be be able to solve this in four lines, without a loop.
     # But solve it any way you can.
-    return [42]
+
+    data = img.get_fdata()
+    first = data[:,:,:,1:]
+    second = data[:,:,:,:-1]
+
+    diff = first - second
+    dvar_val = np.sqrt(np.mean(diff ** 2, axis = (0,1,2)))
+    #import pdb;
+    #pdb.set_trace()
+    return(dvar_val)
