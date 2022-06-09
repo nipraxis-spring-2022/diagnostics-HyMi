@@ -53,15 +53,15 @@ def validate_data(data_directory):
         ``hash_list.txt`` file.
     """
     # Read lines from ``hash_list.txt`` file.
-    for line in open(os.path.join(data_directory, 'data_hashes.txt'), 'rt'):
-    # Split into SHA1 hash and filename
-    hash, filename = line.strip().split()
-    # Calculate actual hash for given filename.
-    actual_hash = file_hash(os.path.join(data_directory, filename))
-    # If hash for filename is not the same as the one in the file, raise
-    # ValueError
-    if hash != actual_hash:
-        raise ValueError("Hash for {} does not match".format(filename))
+    for line in open(os.path.join(data_directory, 'group-01/hash_list.txt'), 'rt'):
+        # Split into SHA1 hash and filename
+        hash, filename = line.strip().split()
+        # Calculate actual hash for given filename.
+        actual_hash = file_hash(os.path.join(data_directory, filename))
+        # If hash for filename is not the same as the one in the file, raise
+        # ValueError
+        if hash != actual_hash:
+            raise ValueError("Hash for {} does not match".format(filename))
 
 
 def main():

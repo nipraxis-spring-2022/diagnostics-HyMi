@@ -27,7 +27,7 @@ import nibabel as nib
 
 # This import needs the directory containing the findoutlie directory
 # on the Python path.
-from spm_funcs import get_spm_globals, spm_global
+from ..spm_funcs import get_spm_globals, spm_global
 
 
 def test_spm_globals():
