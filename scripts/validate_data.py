@@ -25,12 +25,10 @@ def file_hash(filename):
         SHA1 hexadecimal hash string for contents of `filename`.
     """
     # Open the file, read contents as bytes.
-    read_file = open(filename, 'rb')
-    file = read_file.read()
-    read_file.close()
     # Calculate, return SHA1 has on the bytes from the file.
-    return hashlib.sha1(file).hexdigest()
-
+    with open(filename, 'rb') as fobj:
+        contents = fobj.read()
+    return hashlib.sha1(contents).hexdigest()
 
 
 def validate_data(data_directory):
@@ -55,18 +53,15 @@ def validate_data(data_directory):
         ``hash_list.txt`` file.
     """
     # Read lines from ``hash_list.txt`` file.
-    file = open(op.join(data_directory, 'group-01', 'hash_list.txt'), 'rt')
-    for i in file.readlines():
-        # Split into SHA1 hash and filename
-        hash, fname = i.strip().split()
-
-        # Calculate actual hash for given filename.
-        hash_calc = file_hash(op.join(data_directory, fname))
-
-        # If hash for filename is not the same as the one in the file, raise
-        # ValueError
-        if hash != hash_calc:
-            raise ValueError("Hash does not match".format(fname))
+    for line in open(os.path.join(data_directory, 'data_hashes.txt'), 'rt'):
+    # Split into SHA1 hash and filename
+    hash, filename = line.strip().split()
+    # Calculate actual hash for given filename.
+    actual_hash = file_hash(os.path.join(data_directory, filename))
+    # If hash for filename is not the same as the one in the file, raise
+    # ValueError
+    if hash != actual_hash:
+        raise ValueError("Hash for {} does not match".format(filename))
 
 
 def main():
@@ -79,7 +74,6 @@ def main():
     data_directory = sys.argv[1]
     # Call function to validate data in data directory
     validate_data(data_directory)
-
 
 if __name__ == '__main__':
     # Python is running this file as a script, not importing it.
